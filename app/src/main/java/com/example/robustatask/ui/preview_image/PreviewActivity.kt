@@ -3,6 +3,8 @@ package com.example.robustatask.ui.preview_image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.core.content.ContextCompat
+import com.example.robustatask.R
 import com.example.robustatask.databinding.ActivityPreviewBinding
 import com.example.robustatask.domain.pojos.models.WeatherModel
 import com.example.robustatask.utils.*
@@ -24,16 +26,25 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
     }
 
     override fun onFetchActivityArgs(imagePath: String) {
-        ui.weatherLayout.loadImage(imagePath)
+        ui.weatherImageView.loadImage(imagePath)
     }
 
     override fun onLoadWeatherDetailsSuccess(weather: WeatherModel) {
-        ui.weatherLayout.showWeatherBanner(weather)
+        ui.weatherImageView.showWeatherBanner(weather)
     }
 
     override fun onGetLatLon(lat: Double, lon: Double) {
         presenter.loadWeatherDetails(lat, lon)
     }
+
+    override fun onPrepareFacebookSharingSuccess(storyPath: String) {
+        shareToFaceBook(this, storyPath)
+    }
+
+    override fun onPrepareTwitterSharingSuccess(storyPath: String) {
+        shareToTwitter(this, storyPath)
+    }
+
 
     override fun showLoading() {
         ui.progressBar.show()
@@ -55,6 +66,16 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
         requestLocationPermission(this)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        presenter.attachView(this, lifecycle)
+        checkLocationPermission()
+    }
+
     private fun checkLocationPermission() {
         if (isLocationPermissionGranted(this)) {
             onPermissionGranted()
@@ -65,10 +86,29 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
 
     private fun initClickListeners() {
         with(ui) {
-            showWeatherBtn.setOnClickListener {
-                checkLocationPermission()
+            shareBtn.setOnClickListener {
+                with(showShareBottomSheet()) {
+                    storyImageView.loadCircularImage(weatherImageView.generateBitmap())
+                    this.shareFbBtn.setOnClickListener {
+                        presenter.shareStoryToFacebook(
+                            createFileFromBitmap(
+                                this@PreviewActivity,
+                                weatherImageView.generateBitmap()
+                            )
+                        )
+                    }
+
+                    this.shareTwBtn.setOnClickListener {
+                        presenter.shareStoryToTwitter(
+                            createFileFromBitmap(
+                                this@PreviewActivity,
+                                weatherImageView.generateBitmap()
+                            )
+                        )
+
+                    }
+                }
             }
         }
     }
-
 }

@@ -17,16 +17,26 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.util.Log
+import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.robustatask.R
+import com.example.robustatask.databinding.ShareBottomSheetLayoutBinding
+import com.example.robustatask.ui.preview_image.PreviewActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,6 +52,43 @@ fun createImageFile(context: Context): File? {
     val timeStamp: String = SimpleDateFormat(fileFormat, Locale.US).format(Date())
     val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile("JPEG_${timeStamp}_", ".$fileExtension", storageDir)
+}
+
+
+fun createFileFromBitmap(context: Context, bitmap: Bitmap): File {
+    val fileFormat = "yyyy-MM-dd-HH-mm-ss-SSS"
+    val timeStamp: String = SimpleDateFormat(fileFormat, Locale.US).format(Date())
+    val path: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val file = File(path, "WeatherStatus$timeStamp.jpg")
+    var fileOutPutStream: FileOutputStream? = null
+    try {
+        fileOutPutStream = FileOutputStream(file)
+        bitmap.compress(
+            Bitmap.CompressFormat.JPEG,
+            100,
+            fileOutPutStream
+        )
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+
+    } finally {
+        if (fileOutPutStream != null) {
+            try {
+                fileOutPutStream.flush()
+                fileOutPutStream.getFD().sync()
+                fileOutPutStream.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    MediaStore.Images.Media.insertImage(
+        context.contentResolver,
+        file.absolutePath,
+        file.name,
+        file.name
+    )
+    return file
 }
 
 
@@ -122,9 +169,19 @@ fun ImageView.loadImage(src: Any?) {
         .into(this)
 }
 
+
+fun ImageView.loadCircularImage(src: Any?, placeholderDrawable: Drawable? = null) {
+    Glide.with(this).load(src)
+        .transform(MultiTransformation<Bitmap>(CenterCrop(), CircleCrop()))
+        .placeholder(placeholderDrawable)
+        .into(this)
+}
+
+
 fun View.show() {
     this.visibility = View.VISIBLE
 }
+
 
 fun View.gone() {
     this.visibility = View.GONE
@@ -255,4 +312,21 @@ fun drawableToBitmap(drawable: Drawable?): Bitmap? {
         return bitmap
     }
     return null
+}
+
+
+fun PreviewActivity.showShareBottomSheet(): ShareBottomSheetLayoutBinding {
+    val bottomSheet = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+    val binding = ShareBottomSheetLayoutBinding.inflate(LayoutInflater.from(this))
+    bottomSheet.setContentView(binding.root)
+    bottomSheet.show()
+    return binding
+}
+
+
+fun ImageView.generateBitmap(): Bitmap {
+    val bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.RGB_565)
+    val canvas = Canvas(bitmap)
+    this.draw(canvas)
+    return bitmap
 }

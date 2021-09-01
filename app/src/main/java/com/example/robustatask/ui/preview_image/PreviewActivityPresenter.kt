@@ -8,6 +8,7 @@ import com.example.robustatask.domain.useCases.WeatherUseCase
 import com.example.robustatask.ui.main_activity.MainActivity.Companion.ARG_IMAGE_FILE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.io.File
 
 class PreviewActivityPresenter(private val useCase: WeatherUseCase) :
     BasePresenter<PreviewActivityContract.View>(),
@@ -47,5 +48,13 @@ class PreviewActivityPresenter(private val useCase: WeatherUseCase) :
                     view?.showError(it.message)
                 })
         )
+    }
+
+    override fun shareStoryToFacebook(file: File) {
+        view?.onPrepareFacebookSharingSuccess(file.path)
+    }
+
+    override fun shareStoryToTwitter(file: File) {
+        view?.onPrepareTwitterSharingSuccess(file.path)
     }
 }

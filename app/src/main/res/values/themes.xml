@@ -15,9 +15,17 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.RobustaTask.PreviewActivityStyle" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge" >
+    <style name="Theme.RobustaTask.PreviewActivityStyle" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="android:forceDarkAllowed">false</item>
 
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>

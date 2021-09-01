@@ -5,6 +5,8 @@
     <color name="purple_700">#3700B3</color>
     <color name="teel_200">#03DAC6</color>
     <color name="teel_700">#018786</color>
+    <color name="colorBlue">#014887</color>
+    <color name="colorBlueSky">#03A9F4</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 </resources>

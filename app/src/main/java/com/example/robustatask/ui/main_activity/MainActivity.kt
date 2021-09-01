@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         requestCameraPermission(this)
     }
 
-    override fun onPickImageSuccess(imagePath:String) {
+    override fun onPickImageSuccess(imagePath: String) {
         navigateToPreviewActivity(imagePath)
     }
 
@@ -70,6 +70,16 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun showError(err: String?) {
         err?.let { showToastMessage(this, it) }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        presenter.attachView(this, lifecycle)
+        checkCameraPermission()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

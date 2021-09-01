@@ -16,5 +16,8 @@
     <string name="feels_like">Feels like:</string>
     <string name="share">Share</string>
     <string name="show_weather">Show Weather</string>
+    <string name="share_with_facebook">Share with facebook</string>
+    <string name="share_with_twitter">Share with twitter</string>
+    <string name="share_now">Share Now</string>
 
 </resources>

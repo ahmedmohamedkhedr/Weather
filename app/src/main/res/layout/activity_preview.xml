@@ -9,9 +9,7 @@
     tools:context=".ui.preview_image.PreviewActivity">
 
     <com.example.robustatask.ui.bannerImageView.BannerImageView
-        android:id="@+id/weatherLayout"
-        android:visibility="visible"
-        tools:visibility="visible"
+        android:id="@+id/weatherImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
@@ -19,11 +17,13 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
         android:scaleType="centerCrop"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/shareBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -36,26 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/showWeatherBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:stateListAnimator="@null"
-        android:text="@string/show_weather"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="@dimen/fontMedium"
-        app:backgroundTint="@color/white"
-        app:cornerRadius="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/shareBtn"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/shareBtn"
@@ -77,6 +57,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@+id/showWeatherBtn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
