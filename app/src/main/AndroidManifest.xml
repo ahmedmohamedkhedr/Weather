@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RobustaTask">
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity
             android:name=".ui.preview_image.PreviewActivity"
             android:theme="@style/Theme.RobustaTask.PreviewActivityStyle" />
@@ -42,6 +46,11 @@
                 android:resource="@xml/file_paths"
                 tools:replace="android:resource" />
         </provider>
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider435131427825707"
+            android:exported="true" />
 
     </application>
 

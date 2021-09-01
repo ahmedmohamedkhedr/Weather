@@ -5,13 +5,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.core.content.ContextCompat
 import com.example.robustatask.R
-import com.example.robustatask.base.convertToWeatherStoryModel
 import com.example.robustatask.databinding.ActivityPreviewBinding
 import com.example.robustatask.domain.pojos.models.WeatherModel
 import com.example.robustatask.domain.pojos.models.WeatherStoryModel
 import com.example.robustatask.utils.*
+import com.facebook.share.model.SharePhoto
+import com.facebook.share.model.SharePhotoContent
+import com.facebook.share.widget.ShareDialog
 import org.koin.android.ext.android.inject
 
 class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
