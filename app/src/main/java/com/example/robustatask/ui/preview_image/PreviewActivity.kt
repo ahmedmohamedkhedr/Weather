@@ -28,7 +28,6 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
     }
 
     override fun onLoadWeatherDetailsSuccess(weather: WeatherModel) {
-        //setWeatherDataToViews(weather)
         ui.weatherLayout.showWeatherBanner(weather)
     }
 
@@ -71,29 +70,5 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
             }
         }
     }
-
-//    @SuppressLint("SetTextI18n")
-//    private fun setWeatherDataToViews(weatherModel: WeatherModel) = with(ui.weatherLayout) {
-//        val strWindDirection = resources.getStringArray(R.array.WindDirections)
-//            .elementAt(WindDirectionEnum.values().indexOf(weatherModel.windDirection))
-//        locationTextView.text = "${weatherModel.countryCode}, ${weatherModel.cityName}"
-//        tempTextView.text = "${weatherModel.temp.toString()} °C"
-//        maxMinTemp.text = "${weatherModel.maxTemp}°/${weatherModel.minTemp}°"
-//        weatherDescTextView.text = "${weatherModel.tempDescription}"
-//        updatedAtTextView.text =
-//            longToString(weatherModel.updatedAt ?: 0L, FULL_DATE_FORMAT)
-//        windSpeedTextView.text = "${weatherModel.windSpeed}m/s $strWindDirection"
-//        humidityTextView.text = "${weatherModel.humidity}%"
-//        pressureTextView.text = "${weatherModel.pressure}hPa"
-//        feelsLikeTextView.text = "${getString(R.string.feels_like)} ${weatherModel.feelsLike} °C"
-//        weatherImageView.loadImage(weatherModel.tempIcon?.let { it1 ->
-//            ContextCompat.getDrawable(
-//                this@PreviewActivity,
-//                it1
-//            )
-//        })
-//        root.show()
-//        ui.showWeatherBtn.gone()
-//    }
 
 }
