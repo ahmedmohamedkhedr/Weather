@@ -2,6 +2,7 @@ package com.example.robustatask.ui.bannerImageView
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -68,12 +69,13 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
 
 
     private fun drawLocation(canvas: Canvas, locationNme: String?) {
-        paint.color = Color.WHITE
-        paint.textSize = 40f
-        drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_location))?.let {
-            canvas.drawBitmap(it, 10f, 50f, paint)
-        }
-        locationNme?.let { canvas.drawText(it, 90f, 90f, paint) }
+        drawBitmap(
+            canvas,
+            drawableToBitmap(ContextCompat.getDrawable(context, R.drawable.ic_location)),
+            10f,
+            50f
+        )
+        locationNme?.let { drawText(canvas, it, 90f, 90f, 40f) }
     }
 
 
@@ -82,9 +84,7 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
             val drawable =
                 model.tempIcon?.let { resId -> ContextCompat.getDrawable(context, resId) }
             val bitmap = drawableToBitmap(drawable)
-            bitmap?.let {
-                canvas.drawBitmap(it, -50f, 50f, paint)
-            }
+            drawBitmap(canvas, bitmap, -50f, 50f)
             drawText(canvas, "$temp °C", 390f, 250f, 100f)
         }
     }
@@ -132,6 +132,13 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
             measuredHeight.minus(measuredHeight.minus(y)),
             paint
         )
+    }
+
+    private fun drawBitmap(canvas: Canvas, bitmap: Bitmap?, left: Float, top: Float) {
+        paint.color = Color.WHITE
+        bitmap?.let {
+            canvas.drawBitmap(it, left, top, paint)
+        }
     }
 
 
