@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="WindDirections">
+        <item>@string/e</item>
+        <item>@string/n</item>
+        <item>@string/w</item>
+        <item>@string/s</item>
+        <item>@string/ne</item>
+        <item>@string/nw</item>
+        <item>@string/se</item>
+        <item>@string/sw</item>
+    </string-array>
+</resources>

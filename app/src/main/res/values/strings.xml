@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">RobustaTask</string>
+    <string name="an_error_happened">An error happened</string>
+    <string name="network_error">Error connection</string>
+    <string name="e">E</string>
+    <string name="n">N</string>
+    <string name="w">W</string>
+    <string name="s">S</string>
+    <string name="ne">NE</string>
+    <string name="nw">NW</string>
+    <string name="se">SE</string>
+    <string name="sw">SW</string>
+    <string name="wind_speed">Wind speed:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="pressure">Pressure:</string>
+    <string name="feels_like">Feels like:</string>
+    <string name="share">Share</string>
+    <string name="show_weather">Show Weather</string>
+
+</resources>
