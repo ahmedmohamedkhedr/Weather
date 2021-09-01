@@ -22,6 +22,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             override fun onRemoveStory(storyId: String, position: Int) {
                 presenter.deleteStory(position, storyId)
             }
+
+            override fun onItemClick(itemPath: String) {
+                navigateToPreviewActivity(
+                    itemPath,
+                    PreviewActivity.Companion.EntranceType.PREVIEW_TYPE
+                )
+            }
         })
     }
 
@@ -32,6 +39,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         setContentView(ui.root)
         initClickListeners()
         setupRecyclerView()
+        presenter.loadHistory()
     }
 
 
@@ -66,13 +74,14 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun onPickImageSuccess(imagePath: String) {
-        navigateToPreviewActivity(imagePath)
+        navigateToPreviewActivity(imagePath, PreviewActivity.Companion.EntranceType.OTHER)
     }
 
-    private fun navigateToPreviewActivity(imagePath: String) {
-        val intent = Intent(this, PreviewActivity::class.java)
-        intent.putExtra(ARG_IMAGE_FILE, imagePath)
-        startActivity(intent)
+    private fun navigateToPreviewActivity(
+        imagePath: String,
+        entranceType: PreviewActivity.Companion.EntranceType
+    ) {
+        PreviewActivity.start(this, entranceType, imagePath)
     }
 
 
@@ -119,10 +128,4 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             presenter.checkDataFromActivityResult()
         }
     }
-
-
-    companion object {
-        const val ARG_IMAGE_FILE = "ARG_IMAGE_FILE"
-    }
-
 }

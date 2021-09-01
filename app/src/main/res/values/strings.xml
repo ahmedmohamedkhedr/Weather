@@ -19,5 +19,8 @@
     <string name="share_with_facebook">Share with facebook</string>
     <string name="share_with_twitter">Share with twitter</string>
     <string name="share_now">Share Now</string>
+    <string name="error_saving_weather_story">An error happened while saving story</string>
+    <string name="error_getting_saved_weather_stories">Cannot get your history</string>
+    <string name="story_saved">Story saved !</string>
 
 </resources>

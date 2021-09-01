@@ -6,6 +6,7 @@ import android.location.Location
 import com.example.robustatask.base.BaseIPresenter
 import com.example.robustatask.base.BaseIView
 import com.example.robustatask.domain.pojos.models.WeatherModel
+import com.example.robustatask.domain.pojos.models.WeatherStoryModel
 import java.io.File
 
 interface PreviewActivityContract {
@@ -16,14 +17,20 @@ interface PreviewActivityContract {
         fun loadWeatherDetails(lat: Double, lon: Double)
         fun shareStoryToFacebook(file: File)
         fun shareStoryToTwitter(file: File)
+        fun prepareSavingStory(weather: WeatherModel, storyFile: File)
+        fun saveWeatherStory(weatherStory: WeatherStoryModel)
+        fun publishHistoryEvent()
     }
 
     interface View : BaseIView {
-        fun onFetchActivityArgs(imagePath: String)
+        fun onPreviewEntrance(imagePath: String)
+        fun onNotPreviewEntrance(imagePath: String)
         fun onLoadWeatherDetailsSuccess(weather: WeatherModel)
         fun onGetLatLon(lat: Double, lon: Double)
         fun onPrepareFacebookSharingSuccess(storyPath: String)
         fun onPrepareTwitterSharingSuccess(storyPath: String)
+        fun onPrepareSavingStorySuccess(weatherStory: WeatherStoryModel)
+        fun onSaveWeatherStorySuccess()
 
     }
 }

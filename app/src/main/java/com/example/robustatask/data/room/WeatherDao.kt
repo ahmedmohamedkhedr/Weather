@@ -5,7 +5,7 @@ import com.example.robustatask.data.room.WeatherEntity
 import io.reactivex.Observable
 
 @Dao
-interface RepoDao {
+interface WeatherDao {
     @Query("SELECT * FROM weather")
     fun getWeatherDetailsList(): Observable<List<WeatherEntity?>?>?
 

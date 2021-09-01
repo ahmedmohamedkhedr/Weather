@@ -1,12 +1,16 @@
 package com.example.robustatask.ui.preview_image
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import com.example.robustatask.R
+import com.example.robustatask.base.convertToWeatherStoryModel
 import com.example.robustatask.databinding.ActivityPreviewBinding
 import com.example.robustatask.domain.pojos.models.WeatherModel
+import com.example.robustatask.domain.pojos.models.WeatherStoryModel
 import com.example.robustatask.utils.*
 import org.koin.android.ext.android.inject
 
@@ -22,15 +26,29 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
         presenter.attachView(this, lifecycle)
         initClickListeners()
         presenter.getActivityIntent(intent)
-        checkLocationPermission()
     }
 
-    override fun onFetchActivityArgs(imagePath: String) {
+    override fun onPreviewEntrance(imagePath: String) {
         ui.weatherImageView.loadImage(imagePath)
+    }
+
+    override fun onNotPreviewEntrance(imagePath: String) {
+        ui.weatherImageView.loadImage(imagePath, object : OnImageLoad {
+            override fun onFinished() {
+                checkLocationPermission()
+            }
+        })
     }
 
     override fun onLoadWeatherDetailsSuccess(weather: WeatherModel) {
         ui.weatherImageView.showWeatherBanner(weather)
+        presenter.prepareSavingStory(
+            weather,
+            createFileFromBitmap(
+                this,
+                ui.weatherImageView.generateBitmap()
+            )
+        )
     }
 
     override fun onGetLatLon(lat: Double, lon: Double) {
@@ -45,6 +63,14 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
         shareToTwitter(this, storyPath)
     }
 
+    override fun onPrepareSavingStorySuccess(weatherStory: WeatherStoryModel) {
+        presenter.saveWeatherStory(weatherStory)
+    }
+
+    override fun onSaveWeatherStorySuccess() {
+        presenter.publishHistoryEvent()
+        showToastMessage(this, getString(R.string.story_saved))
+    }
 
     override fun showLoading() {
         ui.progressBar.show()
@@ -114,4 +140,22 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
             }
         }
     }
+
+    companion object {
+        const val ARG_IMAGE_FILE = "ARG_IMAGE_FILE"
+        const val ARG_ENTRANCE_TYPE = "ARG_ENTRANCE_TYPE"
+
+        fun start(context: Context, entranceType: EntranceType, imagePath: String?) {
+            val intent = Intent(context, PreviewActivity::class.java)
+            intent.putExtra(ARG_IMAGE_FILE, imagePath)
+            intent.putExtra(ARG_ENTRANCE_TYPE, entranceType)
+            context.startActivity(intent)
+        }
+
+        enum class EntranceType {
+            PREVIEW_TYPE,
+            OTHER
+        }
+    }
 }
+

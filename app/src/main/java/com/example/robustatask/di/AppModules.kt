@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 val appModules = module {
 
     factory<MainActivityContract.Presenter> {
-        MainActivityPresenter()
+        MainActivityPresenter(get())
     }
 
     factory<PreviewActivityContract.Presenter> {
