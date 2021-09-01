@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RobustaTask</string>
+    <string name="app_name">Weather</string>
     <string name="an_error_happened">An error happened</string>
     <string name="network_error">Error connection</string>
     <string name="e">E</string>
