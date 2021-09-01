@@ -81,10 +81,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun onLoadHistorySuccess(historyStories: MutableList<WeatherStoryModel>?) {
-        val allData = mutableListOf<WeatherStoryModel>()
-        historyStories?.let { allData.addAll(it) }
-        allData.addAll(storiesAdapter.getData())
-        presenter.checkLoadedHistoryList(allData)
+        presenter.checkLoadedHistoryList(historyStories)
     }
 
     override fun onDeleteStorySuccess(position: Int) {
