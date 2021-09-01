@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.example.robustatask.R
 import com.example.robustatask.databinding.ActivityMainBinding
+import com.example.robustatask.domain.pojos.models.WeatherStoryModel
+import com.example.robustatask.ui.adapters.WeatherStoriesAdapter
 import com.example.robustatask.ui.preview_image.PreviewActivity
 import com.example.robustatask.utils.*
 import org.koin.android.ext.android.inject
@@ -15,6 +17,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private val presenter: MainActivityContract.Presenter by inject()
     private lateinit var ui: ActivityMainBinding
 
+    private val storiesAdapter: WeatherStoriesAdapter by lazy {
+        WeatherStoriesAdapter(object : WeatherStoriesAdapter.StoryListener {
+            override fun onRemoveStory(storyId: String, position: Int) {
+                presenter.deleteStory(position, storyId)
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +31,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         presenter.attachView(this, lifecycle)
         setContentView(ui.root)
         initClickListeners()
+        setupRecyclerView()
     }
 
 
@@ -31,6 +41,10 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
                 checkCameraPermission()
             }
         }
+    }
+
+    private fun setupRecyclerView() {
+        ui.historyRecyclerView.adapter = storiesAdapter
     }
 
 
@@ -64,6 +78,28 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onPickImageError() {
         showError(getString(R.string.an_error_happened))
+    }
+
+    override fun onLoadHistorySuccess(historyStories: MutableList<WeatherStoryModel>?) {
+        val allData = mutableListOf<WeatherStoryModel>()
+        historyStories?.let { allData.addAll(it) }
+        allData.addAll(storiesAdapter.getData())
+        presenter.checkLoadedHistoryList(allData)
+    }
+
+    override fun onDeleteStorySuccess(position: Int) {
+        storiesAdapter.removeItem(position)
+    }
+
+    override fun onHistoryEmpty() {
+        ui.historyRecyclerView.gone()
+        ui.emptyImageView.show()
+    }
+
+    override fun onHistoryNotEmpty(history: MutableList<WeatherStoryModel>) {
+        ui.emptyImageView.gone()
+        ui.historyRecyclerView.show()
+        storiesAdapter.pushData(history)
     }
 
     override fun showError(err: String?) {

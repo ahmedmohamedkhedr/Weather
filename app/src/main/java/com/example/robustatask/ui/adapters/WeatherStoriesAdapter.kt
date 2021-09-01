@@ -11,14 +11,14 @@ import com.example.robustatask.utils.longToString
 
 class WeatherStoriesAdapter(private val listener: StoryListener) :
     RecyclerView.Adapter<WeatherStoriesAdapter.ViewHolder>() {
-    private val storiesList = mutableListOf<WeatherStoryModel>()
+    private var storiesList = mutableListOf<WeatherStoryModel>()
 
     inner class ViewHolder(private val viewBinding: ItemWeatherHistoryLayoutBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
         init {
             viewBinding.deleteStoryBtn.setOnClickListener {
-                listener.onRemoveStory(storiesList[adapterPosition].ID)
+                listener.onRemoveStory(storiesList[adapterPosition].ID, adapterPosition)
             }
         }
 
@@ -51,7 +51,7 @@ class WeatherStoriesAdapter(private val listener: StoryListener) :
     override fun getItemCount(): Int = storiesList.size
 
     fun pushData(data: MutableList<WeatherStoryModel>) {
-        storiesList.addAll(data)
+        storiesList = data
         notifyDataSetChanged()
     }
 
@@ -61,7 +61,9 @@ class WeatherStoriesAdapter(private val listener: StoryListener) :
         notifyItemRangeChanged(position, itemCount)
     }
 
+    fun getData(): MutableList<WeatherStoryModel> = storiesList
+
     interface StoryListener {
-        fun onRemoveStory(storyId: String)
+        fun onRemoveStory(storyId: String, position: Int)
     }
 }
