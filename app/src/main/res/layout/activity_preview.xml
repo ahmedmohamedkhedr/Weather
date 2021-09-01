@@ -8,22 +8,6 @@
     android:background="@color/black"
     tools:context=".ui.preview_image.PreviewActivity">
 
-
-<!--    <ImageView-->
-<!--        android:id="@+id/takenImageView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:layout_marginEnd="24dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/shareBtn"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        tools:ignore="ContentDescription" />-->
-
     <com.example.robustatask.ui.bannerImageView.BannerImageView
         android:id="@+id/weatherLayout"
         android:visibility="visible"
@@ -40,7 +24,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"/>
-
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -20,7 +20,6 @@ import kotlin.math.min
 @SuppressLint("AppCompatCustomView")
 class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
 
-    // Paint object for coloring and styling
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var bannerSize = 0
@@ -36,7 +35,6 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
                 drawWeatherDetails(canvas)
             }
         }
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -53,12 +51,7 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
     private fun drawWeatherDetails(canvas: Canvas) {
         weatherInfo?.apply {
             drawLocation(canvas, this.cityName)
-            drawTemperature(
-                canvas,
-                this.temp.toString(),
-                this.maxTemp.toString(),
-                this.minTemp.toString()
-            )
+            drawTemperature(canvas, this.temp.toString())
             drawFeelLikeText(canvas, this.feelsLike.toString())
             drawWeatherDescText(canvas, this.tempDescription)
             drawUpdatedAtText(canvas, longToString(this.updatedAt ?: 0L, FULL_DATE_FORMAT))
@@ -84,99 +77,61 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
     }
 
 
-    private fun drawTemperature(canvas: Canvas, temp: String, maxTem: String, minTemp: String) {
-        paint.color = Color.WHITE
+    private fun drawTemperature(canvas: Canvas, temp: String) {
         weatherInfo?.let { model ->
             val drawable =
                 model.tempIcon?.let { resId -> ContextCompat.getDrawable(context, resId) }
             val bitmap = drawableToBitmap(drawable)
             bitmap?.let {
                 canvas.drawBitmap(it, -50f, 50f, paint)
-                paint.textSize = 100f
-                canvas.drawText(
-                    "$temp °C",
-                    390f,
-                    measuredHeight.minus(measuredHeight.minus(250)).toFloat(),
-                    paint
-                )
             }
+            drawText(canvas, "$temp °C", 390f, 250f, 100f)
         }
     }
 
     private fun drawFeelLikeText(canvas: Canvas, feelLike: String) {
-        paint.color = Color.WHITE
-        paint.textSize = 40f
-        canvas.drawText(
-            "${context.getString(R.string.feels_like)} $feelLike °C",
-            390f,
-            measuredHeight.minus(measuredHeight.minus(320)).toFloat(),
-            paint
-        )
+        drawText(canvas, "${context.getString(R.string.feels_like)} $feelLike °C", 390f, 320f, 40f)
     }
 
     private fun drawWeatherDescText(canvas: Canvas, weatherDesc: String?) {
         weatherDesc?.let {
-            paint.color = Color.WHITE
-            paint.textSize = 40f
-            canvas.drawText(
-                it,
-                390f,
-                measuredHeight.minus(measuredHeight.minus(390)).toFloat(),
-                paint
-            )
+            drawText(canvas, it, 390f, 390f, 40f)
         }
     }
 
     private fun drawUpdatedAtText(canvas: Canvas, updatedAt: String?) {
         updatedAt?.let {
-            paint.color = Color.WHITE
-            paint.textSize = 40f
-            canvas.drawText(
-                it,
-                390f,
-                measuredHeight.minus(measuredHeight.minus(460)).toFloat(),
-                paint
-            )
+            drawText(canvas, it, 390f, 460f, 40f)
         }
     }
 
     private fun drawWindSpeedText(canvas: Canvas, updatedAt: String?) {
         updatedAt?.let {
-            paint.color = Color.WHITE
-            paint.textSize = 40f
-            canvas.drawText(
-                it,
-                20f,
-                measuredHeight.minus(measuredHeight.minus(560)).toFloat(),
-                paint
-            )
+            drawText(canvas, it, 20f, 560f, 40f)
         }
     }
 
     private fun drawHumidityText(canvas: Canvas, humidity: String?) {
         humidity?.let {
-            paint.color = Color.WHITE
-            paint.textSize = 40f
-            canvas.drawText(
-                it,
-                20f,
-                measuredHeight.minus(measuredHeight.minus(630)).toFloat(),
-                paint
-            )
+            drawText(canvas, it, 20f, 630f, 40f)
         }
     }
 
     private fun drawPressureText(canvas: Canvas, pressure: String?) {
         pressure?.let {
-            paint.color = Color.WHITE
-            paint.textSize = 40f
-            canvas.drawText(
-                it,
-                20f,
-                measuredHeight.minus(measuredHeight.minus(700)).toFloat(),
-                paint
-            )
+            drawText(canvas, it, 20f, 700f, 40f)
         }
+    }
+
+    private fun drawText(canvas: Canvas, text: String, x: Float, y: Float, textSize: Float) {
+        paint.color = Color.WHITE
+        paint.textSize = textSize
+        canvas.drawText(
+            text,
+            x,
+            measuredHeight.minus(measuredHeight.minus(y)),
+            paint
+        )
     }
 
 
