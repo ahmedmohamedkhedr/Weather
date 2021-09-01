@@ -1,10 +1,14 @@
 package com.example.robustatask.di
 
-import com.example.robustatask.data.apiHelper.ApiHelper
-import com.example.robustatask.data.apiHelper.ApiHelperImp
+import android.content.Context
+import androidx.room.Room
+import com.example.robustatask.data.helpers.apiHelper.ApiHelper
+import com.example.robustatask.data.helpers.apiHelper.ApiHelperImp
 import com.example.robustatask.data.network.ApiService
-import com.example.robustatask.data.resourcesHelper.ResourcesHelper
-import com.example.robustatask.data.resourcesHelper.ResourcesHelperImp
+import com.example.robustatask.data.helpers.resourcesHelper.ResourcesHelper
+import com.example.robustatask.data.helpers.resourcesHelper.ResourcesHelperImp
+import com.example.robustatask.data.room.AppDatabase
+import com.example.robustatask.utils.APP_DB_NAME
 import com.example.robustatask.utils.BASE_URL
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -17,6 +21,8 @@ import java.util.concurrent.TimeUnit
 
 private const val RETROFIT_CLIENT = "RETROFIT_CLIENT"
 private const val API_SERVICE = "API_SERVICE"
+private const val APP_DB = "APP_DB"
+private const val DB_DAO = "DB_DAO"
 
 private fun getRetrofit(): Retrofit {
     val client = OkHttpClient.Builder()
@@ -30,6 +36,14 @@ private fun getRetrofit(): Retrofit {
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
+}
+
+private fun getAppDatabase(context: Context): AppDatabase {
+    return Room.databaseBuilder(
+        context,
+        AppDatabase::class.java,
+        APP_DB_NAME
+    ).build()
 }
 
 
@@ -49,4 +63,13 @@ val dataModule = module {
     single<ApiHelper> {
         ApiHelperImp(get(named(API_SERVICE)))
     }
+
+    single(named(APP_DB)) {
+        getAppDatabase(androidContext())
+    }
+
+    single(named(DB_DAO)) {
+        get<AppDatabase>(named(APP_DB)).repoDao
+    }
+
 }

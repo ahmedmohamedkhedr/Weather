@@ -2,8 +2,6 @@ package com.example.robustatask.ui.main_activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +10,6 @@ import com.example.robustatask.databinding.ActivityMainBinding
 import com.example.robustatask.ui.preview_image.PreviewActivity
 import com.example.robustatask.utils.*
 import org.koin.android.ext.android.inject
-import java.io.File
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private val presenter: MainActivityContract.Presenter by inject()
@@ -24,17 +21,18 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         ui = ActivityMainBinding.inflate(LayoutInflater.from(this))
         presenter.attachView(this, lifecycle)
         setContentView(ui.root)
-        setupViewControllers()
+        initClickListeners()
     }
 
 
-    private fun setupViewControllers() {
+    private fun initClickListeners() {
         with(ui) {
             openCameraBtn.setOnClickListener {
                 checkCameraPermission()
             }
         }
     }
+
 
     private fun checkCameraPermission() {
         if (isCameraPermissionGranted(this)) {

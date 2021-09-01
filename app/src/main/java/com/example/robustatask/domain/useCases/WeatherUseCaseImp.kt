@@ -1,8 +1,8 @@
 package com.example.robustatask.domain.useCases
 
 import com.example.robustatask.R
-import com.example.robustatask.data.apiHelper.ApiHelper
-import com.example.robustatask.data.resourcesHelper.ResourcesHelper
+import com.example.robustatask.data.helpers.apiHelper.ApiHelper
+import com.example.robustatask.data.helpers.resourcesHelper.ResourcesHelper
 import com.example.robustatask.domain.mapper.toWeatherDetailsModel
 import com.example.robustatask.base.DataResponseStatus
 import com.example.robustatask.domain.pojos.models.WeatherModel

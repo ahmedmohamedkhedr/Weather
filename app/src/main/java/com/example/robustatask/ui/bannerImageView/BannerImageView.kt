@@ -17,7 +17,6 @@ import com.example.robustatask.utils.drawableToBitmap
 import com.example.robustatask.utils.longToString
 import kotlin.math.min
 
-
 @SuppressLint("AppCompatCustomView")
 class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
 

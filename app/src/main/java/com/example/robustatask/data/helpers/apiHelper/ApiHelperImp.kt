@@ -1,4 +1,4 @@
-package com.example.robustatask.data.apiHelper
+package com.example.robustatask.data.helpers.apiHelper
 
 import com.example.robustatask.data.network.ApiService
 import com.example.robustatask.data.network.networkDataModels.WeatherResponse
