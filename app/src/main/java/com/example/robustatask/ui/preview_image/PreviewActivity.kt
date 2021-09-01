@@ -87,27 +87,30 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
     private fun initClickListeners() {
         with(ui) {
             shareBtn.setOnClickListener {
-                with(showShareBottomSheet()) {
-                    storyImageView.loadCircularImage(weatherImageView.generateBitmap())
-                    this.shareFbBtn.setOnClickListener {
-                        presenter.shareStoryToFacebook(
-                            createFileFromBitmap(
-                                this@PreviewActivity,
-                                weatherImageView.generateBitmap()
-                            )
-                        )
-                    }
+                initBottomSheet()
+            }
+        }
+    }
 
-                    this.shareTwBtn.setOnClickListener {
-                        presenter.shareStoryToTwitter(
-                            createFileFromBitmap(
-                                this@PreviewActivity,
-                                weatherImageView.generateBitmap()
-                            )
-                        )
+    private fun initBottomSheet() {
+        with(showShareBottomSheet()) {
+            storyImageView.loadCircularImage(ui.weatherImageView.generateBitmap())
+            this.shareFbBtn.setOnClickListener {
+                presenter.shareStoryToFacebook(
+                    createFileFromBitmap(
+                        this@PreviewActivity,
+                        ui.weatherImageView.generateBitmap()
+                    )
+                )
+            }
 
-                    }
-                }
+            this.shareTwBtn.setOnClickListener {
+                presenter.shareStoryToTwitter(
+                    createFileFromBitmap(
+                        this@PreviewActivity,
+                        ui.weatherImageView.generateBitmap()
+                    )
+                )
             }
         }
     }
