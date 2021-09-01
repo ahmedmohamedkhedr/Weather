@@ -1,13 +1,9 @@
 package com.example.robustatask.ui.preview_image
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.core.content.ContextCompat
-import com.example.robustatask.R
 import com.example.robustatask.databinding.ActivityPreviewBinding
-import com.example.robustatask.domain.pojos.enums.WindDirectionEnum
 import com.example.robustatask.domain.pojos.models.WeatherModel
 import com.example.robustatask.utils.*
 import org.koin.android.ext.android.inject
@@ -33,7 +29,7 @@ class PreviewActivity : AppCompatActivity(), PreviewActivityContract.View {
 
     override fun onLoadWeatherDetailsSuccess(weather: WeatherModel) {
         //setWeatherDataToViews(weather)
-        ui.weatherLayout.setWeatherInfo(weather)
+        ui.weatherLayout.showWeatherBanner(weather)
     }
 
     override fun onGetLatLon(lat: Double, lon: Double) {

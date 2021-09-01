@@ -9,8 +9,11 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.example.robustatask.R
+import com.example.robustatask.domain.pojos.enums.WindDirectionEnum
 import com.example.robustatask.domain.pojos.models.WeatherModel
+import com.example.robustatask.utils.FULL_DATE_FORMAT
 import com.example.robustatask.utils.drawableToBitmap
+import com.example.robustatask.utils.longToString
 import kotlin.math.min
 
 
@@ -30,7 +33,7 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
         canvas?.apply {
             if (weatherInfo != null) {
                 drawBanner(this)
-                drawWeatherInfo(canvas)
+                drawWeatherDetails(canvas)
             }
         }
 
@@ -47,7 +50,7 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
         canvas.drawRect(0f, 0f, width.toFloat(), bannerSize.toFloat(), paint)
     }
 
-    private fun drawWeatherInfo(canvas: Canvas) {
+    private fun drawWeatherDetails(canvas: Canvas) {
         weatherInfo?.apply {
             drawLocation(canvas, this.cityName)
             drawTemperature(
@@ -58,6 +61,15 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
             )
             drawFeelLikeText(canvas, this.feelsLike.toString())
             drawWeatherDescText(canvas, this.tempDescription)
+            drawUpdatedAtText(canvas, longToString(this.updatedAt ?: 0L, FULL_DATE_FORMAT))
+            val strWindDirection = resources.getStringArray(R.array.WindDirections)
+                .elementAt(WindDirectionEnum.values().indexOf(this.windDirection))
+            drawWindSpeedText(
+                canvas,
+                "${context.getString(R.string.wind_speed)} ${this.windSpeed}m/s $strWindDirection"
+            )
+            drawHumidityText(canvas, "${context.getString(R.string.humidity)} ${this.humidity}%")
+            drawPressureText(canvas, "${context.getString(R.string.pressure)} ${this.pressure}hPa")
         }
     }
 
@@ -115,8 +127,60 @@ class BannerImageView(context: Context, attrs: AttributeSet) : ImageView(context
         }
     }
 
+    private fun drawUpdatedAtText(canvas: Canvas, updatedAt: String?) {
+        updatedAt?.let {
+            paint.color = Color.WHITE
+            paint.textSize = 40f
+            canvas.drawText(
+                it,
+                390f,
+                measuredHeight.minus(measuredHeight.minus(460)).toFloat(),
+                paint
+            )
+        }
+    }
 
-    fun setWeatherInfo(weatherModel: WeatherModel) {
+    private fun drawWindSpeedText(canvas: Canvas, updatedAt: String?) {
+        updatedAt?.let {
+            paint.color = Color.WHITE
+            paint.textSize = 40f
+            canvas.drawText(
+                it,
+                20f,
+                measuredHeight.minus(measuredHeight.minus(560)).toFloat(),
+                paint
+            )
+        }
+    }
+
+    private fun drawHumidityText(canvas: Canvas, humidity: String?) {
+        humidity?.let {
+            paint.color = Color.WHITE
+            paint.textSize = 40f
+            canvas.drawText(
+                it,
+                20f,
+                measuredHeight.minus(measuredHeight.minus(630)).toFloat(),
+                paint
+            )
+        }
+    }
+
+    private fun drawPressureText(canvas: Canvas, pressure: String?) {
+        pressure?.let {
+            paint.color = Color.WHITE
+            paint.textSize = 40f
+            canvas.drawText(
+                it,
+                20f,
+                measuredHeight.minus(measuredHeight.minus(700)).toFloat(),
+                paint
+            )
+        }
+    }
+
+
+    fun showWeatherBanner(weatherModel: WeatherModel) {
         this.weatherInfo = weatherModel
         invalidate()
     }
