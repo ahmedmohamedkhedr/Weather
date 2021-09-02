@@ -1,5 +1,6 @@
 package com.example.robustatask.ui.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -27,9 +28,10 @@ class WeatherStoriesAdapter(private val listener: StoryListener) :
         }
 
 
+        @SuppressLint("SetTextI18n")
         fun bind(story: WeatherStoryModel) = with(viewBinding) {
             storyImageView.loadCircularImage(story.thumbnail)
-            tempTextView.text = story.temp
+            tempTextView.text = "${story.temp} °C"
             weatherDesc.text = story.weatherDesc
             location.text = story.location
             storyCreatedAtTextView.text = longToString(story.createdAt, FULL_DATE_FORMAT)
