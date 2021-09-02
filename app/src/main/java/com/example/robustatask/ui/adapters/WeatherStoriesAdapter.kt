@@ -11,6 +11,7 @@ import com.example.robustatask.utils.longToString
 
 class WeatherStoriesAdapter(private val listener: StoryListener) :
     RecyclerView.Adapter<WeatherStoriesAdapter.ViewHolder>() {
+
     private var storiesList = mutableListOf<WeatherStoryModel>()
 
     inner class ViewHolder(private val viewBinding: ItemWeatherHistoryLayoutBinding) :
