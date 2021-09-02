@@ -2,8 +2,12 @@ package com.example.robustatask.ui.main_activity
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import com.example.robustatask.R
 import com.example.robustatask.databinding.ActivityMainBinding
@@ -12,6 +16,7 @@ import com.example.robustatask.ui.adapters.WeatherStoriesAdapter
 import com.example.robustatask.ui.preview_image.PreviewActivity
 import com.example.robustatask.utils.*
 import org.koin.android.ext.android.inject
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity(), MainActivityContract.View {
     private val presenter: MainActivityContract.Presenter by inject()
@@ -21,6 +26,13 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         WeatherStoriesAdapter(object : WeatherStoriesAdapter.StoryListener {
             override fun onRemoveStory(storyId: String, position: Int) {
                 presenter.deleteStory(position, storyId)
+            }
+
+            override fun onItemClick(itemPath: String) {
+                navigateToPreviewActivity(
+                    itemPath,
+                    PreviewActivity.Companion.EntranceType.PREVIEW_TYPE
+                )
             }
         })
     }
@@ -32,6 +44,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         setContentView(ui.root)
         initClickListeners()
         setupRecyclerView()
+        presenter.loadHistory()
     }
 
 
@@ -66,13 +79,14 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun onPickImageSuccess(imagePath: String) {
-        navigateToPreviewActivity(imagePath)
+        navigateToPreviewActivity(imagePath, PreviewActivity.Companion.EntranceType.OTHER)
     }
 
-    private fun navigateToPreviewActivity(imagePath: String) {
-        val intent = Intent(this, PreviewActivity::class.java)
-        intent.putExtra(ARG_IMAGE_FILE, imagePath)
-        startActivity(intent)
+    private fun navigateToPreviewActivity(
+        imagePath: String,
+        entranceType: PreviewActivity.Companion.EntranceType
+    ) {
+        PreviewActivity.start(this, entranceType, imagePath)
     }
 
 
@@ -119,10 +133,4 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
             presenter.checkDataFromActivityResult()
         }
     }
-
-
-    companion object {
-        const val ARG_IMAGE_FILE = "ARG_IMAGE_FILE"
-    }
-
 }

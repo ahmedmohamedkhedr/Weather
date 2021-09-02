@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.robustatask.data.helpers.apiHelper.ApiHelper
 import com.example.robustatask.data.helpers.apiHelper.ApiHelperImp
+import com.example.robustatask.data.helpers.dbHelper.DbHelper
+import com.example.robustatask.data.helpers.dbHelper.DbHelperImp
 import com.example.robustatask.data.network.ApiService
 import com.example.robustatask.data.helpers.resourcesHelper.ResourcesHelper
 import com.example.robustatask.data.helpers.resourcesHelper.ResourcesHelperImp
@@ -43,7 +45,7 @@ private fun getAppDatabase(context: Context): AppDatabase {
         context,
         AppDatabase::class.java,
         APP_DB_NAME
-    ).build()
+    ).allowMainThreadQueries().build()
 }
 
 
@@ -64,12 +66,16 @@ val dataModule = module {
         ApiHelperImp(get(named(API_SERVICE)))
     }
 
+    single<DbHelper> {
+        DbHelperImp(get(named(DB_DAO)))
+    }
+
     single(named(APP_DB)) {
         getAppDatabase(androidContext())
     }
 
     single(named(DB_DAO)) {
-        get<AppDatabase>(named(APP_DB)).repoDao
+        get<AppDatabase>(named(APP_DB)).weatherDao
     }
 
 }

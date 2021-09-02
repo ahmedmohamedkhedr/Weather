@@ -13,7 +13,7 @@ data class WeatherEntity(
     @ColumnInfo(name = "thumbnailPath")
     var thumbnailPath: String,
 
-    @ColumnInfo(name = "lastName")
+    @ColumnInfo(name = "temp")
     var temp: String,
 
     @ColumnInfo(name = "tempDescription")

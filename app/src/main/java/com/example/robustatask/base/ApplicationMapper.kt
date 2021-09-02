@@ -1,10 +1,14 @@
-package com.example.robustatask.domain.mapper
+package com.example.robustatask.base
 
 import com.example.robustatask.R
 import com.example.robustatask.data.network.networkDataModels.WeatherResponse
+import com.example.robustatask.data.room.WeatherEntity
 import com.example.robustatask.domain.pojos.enums.WeatherIconEnum
 import com.example.robustatask.domain.pojos.enums.WindDirectionEnum
 import com.example.robustatask.domain.pojos.models.WeatherModel
+import com.example.robustatask.domain.pojos.models.WeatherStoryModel
+import com.example.robustatask.utils.FULL_DATE_FORMAT
+import com.example.robustatask.utils.longToString
 import java.util.*
 
 
@@ -61,4 +65,39 @@ private fun Int.convertToWindDirectionEnum(): WindDirectionEnum {
         in 180..270 -> WindDirectionEnum.SW
         else -> WindDirectionEnum.SE
     }
+}
+
+fun WeatherStoryModel.convertToWeatherEntity(): WeatherEntity {
+    return WeatherEntity(
+        storyId = ID,
+        thumbnailPath = thumbnail,
+        temp = temp,
+        tempDescription = weatherDesc,
+        updatedAt = longToString(createdAt, FULL_DATE_FORMAT),
+        location = location
+    )
+}
+
+
+fun WeatherModel.convertToWeatherStoryModel(thumbnailPath: String): WeatherStoryModel {
+    return WeatherStoryModel(
+        ID = UUID.randomUUID().toString(),
+        thumbnail = thumbnailPath,
+        temp = temp?.toString() ?: "",
+        weatherDesc = tempDescription ?: "",
+        createdAt = Calendar.getInstance().time.time,
+        location = cityName ?: ""
+    )
+}
+
+
+fun WeatherEntity.convertToWeatherStoryModel(): WeatherStoryModel {
+    return WeatherStoryModel(
+        ID = storyId,
+        thumbnail = thumbnailPath,
+        temp = temp,
+        weatherDesc = tempDescription,
+        location = location,
+        createdAt = Calendar.getInstance().time.time
+    )
 }

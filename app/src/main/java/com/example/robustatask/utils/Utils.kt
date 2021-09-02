@@ -26,9 +26,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.example.robustatask.R
 import com.example.robustatask.databinding.ShareBottomSheetLayoutBinding
 import com.example.robustatask.ui.preview_image.PreviewActivity
@@ -163,10 +168,37 @@ fun showToastMessage(context: Context, message: String) {
         .show()
 }
 
+interface OnImageLoad {
+    fun onFinished()
+}
 
-fun ImageView.loadImage(src: Any?) {
-    Glide.with(this).load(src)
+
+fun ImageView.loadImage(src: Any?, callback: OnImageLoad? = null) {
+    Glide.with(this)
+        .load(src)
+        .listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(
+                e: GlideException?,
+                model: Any?,
+                target: Target<Drawable>?,
+                isFirstResource: Boolean
+            ): Boolean {
+                return false
+            }
+
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                callback?.onFinished()
+                return false
+            }
+        })
         .into(this)
+
 }
 
 
@@ -224,19 +256,15 @@ fun shareToFaceBook(activity: Activity, path: String) {
 
     val matches: List<ResolveInfo> = activity.packageManager
         .queryIntentActivities(sendIntent, PackageManager.MATCH_DEFAULT_ONLY)
-    var faceBookExist = false
     for (info in matches) {
-        if (info.activityInfo.name.contains("facebook")) {
+        if (info.activityInfo.name.contains("facebook", ignoreCase = true)) {
             sendIntent.setPackage(info.activityInfo.packageName)
-            faceBookExist = true
             break
         }
     }
-    if (faceBookExist) {
-        activity.startActivity(sendIntent)
-    } else {
-        openGooglePlayLink(activity, "com.facebook.katana")
-    }
+
+    activity.startActivity(sendIntent)
+
 }
 
 @SuppressLint("QueryPermissionsNeeded")
@@ -252,19 +280,13 @@ fun shareToTwitter(activity: Activity, path: String) {
 
     val matches: List<ResolveInfo> = activity.packageManager
         .queryIntentActivities(tweetIntent, PackageManager.MATCH_DEFAULT_ONLY)
-    var twitterExist = false
     for (info in matches) {
-        if (info.activityInfo.name.contains("twitter")) {
+        if (info.activityInfo.name.contains("twitter", ignoreCase = true)) {
             tweetIntent.setPackage(info.activityInfo.packageName)
-            twitterExist = true
             break
         }
     }
-    if (twitterExist) {
-        activity.startActivity(tweetIntent)
-    } else {
-        openGooglePlayLink(activity, "com.twitter.android")
-    }
+    activity.startActivity(tweetIntent)
 }
 
 private fun openGooglePlayLink(activity: Activity, packageName: String) {

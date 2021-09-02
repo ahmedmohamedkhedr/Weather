@@ -10,6 +10,7 @@ interface MainActivityContract {
         fun setPickedImagePath(path: String?)
         fun checkDataFromActivityResult()
         fun loadHistory()
+        fun listenToHistoryUpdates()
         fun checkLoadedHistoryList(data: MutableList<WeatherStoryModel>?)
         fun deleteStory(position: Int, storyID: String)
     }

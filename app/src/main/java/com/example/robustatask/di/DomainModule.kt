@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val domainModule = module {
     single<WeatherUseCase> {
-        WeatherUseCaseImp(get(), get())
+        WeatherUseCaseImp(get(), get(), get())
     }
 }

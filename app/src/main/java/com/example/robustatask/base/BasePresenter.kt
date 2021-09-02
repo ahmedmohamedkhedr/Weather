@@ -22,15 +22,11 @@ abstract class BasePresenter<View : BaseIView> : LifecycleObserver, BaseIPresent
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    @CallSuper
-    override fun dispose() {
-        compositeDisposable.dispose()
-    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     @CallSuper
     override fun detachView() {
+        compositeDisposable.dispose()
         view = null
     }
 

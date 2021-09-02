@@ -18,6 +18,9 @@ class WeatherStoriesAdapter(private val listener: StoryListener) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
         init {
+            viewBinding.root.setOnClickListener {
+                listener.onItemClick(storiesList[adapterPosition].thumbnail)
+            }
             viewBinding.deleteStoryBtn.setOnClickListener {
                 listener.onRemoveStory(storiesList[adapterPosition].ID, adapterPosition)
             }
@@ -62,9 +65,8 @@ class WeatherStoriesAdapter(private val listener: StoryListener) :
         notifyItemRangeChanged(position, itemCount)
     }
 
-    fun getData(): MutableList<WeatherStoryModel> = storiesList
-
     interface StoryListener {
         fun onRemoveStory(storyId: String, position: Int)
+        fun onItemClick(itemPath: String)
     }
 }
