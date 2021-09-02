@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
@@ -256,15 +257,24 @@ fun shareToFaceBook(activity: Activity, path: String) {
 
     val matches: List<ResolveInfo> = activity.packageManager
         .queryIntentActivities(sendIntent, PackageManager.MATCH_DEFAULT_ONLY)
+    var faceBookExist = false
     for (info in matches) {
-        if (info.activityInfo.name.contains("facebook", ignoreCase = true)) {
+        if (info.activityInfo.name.contains("facebook")) {
             sendIntent.setPackage(info.activityInfo.packageName)
+            faceBookExist = true
             break
         }
     }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        activity.startActivity(sendIntent)
 
-    activity.startActivity(sendIntent)
-
+    } else {
+        if (faceBookExist) {
+            activity.startActivity(sendIntent)
+        } else {
+            openGooglePlayLink(activity, "com.twitter.android")
+        }
+    }
 }
 
 @SuppressLint("QueryPermissionsNeeded")
@@ -280,13 +290,26 @@ fun shareToTwitter(activity: Activity, path: String) {
 
     val matches: List<ResolveInfo> = activity.packageManager
         .queryIntentActivities(tweetIntent, PackageManager.MATCH_DEFAULT_ONLY)
+    var twitterExist = false
     for (info in matches) {
-        if (info.activityInfo.name.contains("twitter", ignoreCase = true)) {
+        if (info.activityInfo.name.contains("twitter")) {
             tweetIntent.setPackage(info.activityInfo.packageName)
+            twitterExist = true
             break
         }
     }
-    activity.startActivity(tweetIntent)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        activity.startActivity(tweetIntent)
+
+    } else {
+        if (twitterExist) {
+            activity.startActivity(tweetIntent)
+        } else {
+            openGooglePlayLink(activity, "com.twitter.android")
+        }
+    }
+
 }
 
 private fun openGooglePlayLink(activity: Activity, packageName: String) {
