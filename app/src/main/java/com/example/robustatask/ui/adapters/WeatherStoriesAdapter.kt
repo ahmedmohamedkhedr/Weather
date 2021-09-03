@@ -63,8 +63,7 @@ class WeatherStoriesAdapter(private val listener: StoryListener) :
 
     fun removeItem(position: Int) {
         storiesList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, itemCount)
+        notifyDataSetChanged()
     }
 
     interface StoryListener {
